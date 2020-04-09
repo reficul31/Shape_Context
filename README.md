@@ -1,0 +1,2 @@
+# Shape Context
+This repository is a Proof of Concept of the [paper](https://papers.nips.cc/paper/1913-shape-context-a-new-descriptor-for-shape-matching-and-object-recognition.pdf) on the small symbols dataset of Word on Web. In our implementation, we improve the existing method by using our own implementation of preprocessing that allows for better results on our small database.

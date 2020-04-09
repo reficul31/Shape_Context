@@ -4,47 +4,33 @@ Created on Thu Apr  2 11:48:55 2020
 
 @author: shbharad
 """
-# from PIL import Image
-# import io
-# import cv2
-# import numpy as np
-# import matplotlib.pyplot as plt
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
 
-# simpleto = 40
+simpleto = 40
 
-# image = cv2.imread('./images/pound.png', 0)
-# image = cv2.resize(image, (500, 500))
-# ret, thresh = cv2.threshold(image, 127, 255, 0)
-# _, cnts, heir = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-# points = np.array([[0, 0]])
-# for cnt in cnts:
-#     if len(cnts) > 1:
-#         points = np.concatenate([points, np.array(cnt).reshape((-1, 2))], axis=0)
-
-# indexes = [[n[0] != 0 and n[1] != 0 and n[0] != image.shape[1]-1 and n[1] != image.shape[0]-1 for n in points]]
-# points = points[indexes]
-# points = points.tolist()
-# step = int(len(points) / simpleto)
-# if step < 1:
-#     step = 1
-# points = [points[i] for i in range(0, len(points), step)][:simpleto]
-# if len(points) < simpleto:
-#     points = points + [[0, 0]] * (simpleto - len(points))
-
-# points = np.array(points)
-# plt.subplot(111),plt.imshow(image,cmap = 'gray')
-# plt.scatter(x = points[:, 0], y = points[:, 1], c='r', s=40)
-
-# plt.show()
-# import cv2
-# import numpy as np
-import base64, re
-from io import BytesIO
-from PIL import Image
-
-codec = "data:image/png;base64,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"
-base64_data = re.sub('^data:image/.+;base64,', '', codec)
-byte_data = base64.b64decode(base64_data)
-image_data = BytesIO(byte_data)
-img = Image.open(image_data)
-img.save('./some_imge.png', "PNG")
+def show_image_points(image):
+    image = cv2.resize(image, (500, 500))
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    ret, thresh = cv2.threshold(image, 127, 255, 0)
+    _, cnts, heir = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    points = np.array([[0, 0]])
+    for cnt in cnts:
+        if len(cnts) > 1:
+            points = np.concatenate([points, np.array(cnt).reshape((-1, 2))], axis=0)
+    
+    indexes = [[n[0] != 0 and n[1] != 0 and n[0] != image.shape[1]-1 and n[1] != image.shape[0]-1 for n in points]]
+    points = points[indexes]
+    points = points.tolist()
+    step = int(len(points) / simpleto)
+    if step < 1:
+        step = 1
+    points = [points[i] for i in range(0, len(points), step)][:simpleto]
+    if len(points) < simpleto:
+        points = points + [[0, 0]] * (simpleto - len(points))
+    
+    points = np.array(points)
+    plt.subplot(111),plt.imshow(image, cmap='gray')
+    plt.scatter(x = points[:, 0], y = points[:, 1], c='r', s=40)
+    plt.show()

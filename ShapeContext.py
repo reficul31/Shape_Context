@@ -139,6 +139,9 @@ if __name__ == "__main__":
             image_points = sc.get_points_from_img(image)
             image_descriptor = sc.compute(image_points)
             
+            image_points_pruned = sc.get_points_from_img(image, 10)
+            image_descriptor_pruned = sc.compute(image_points_pruned)
+            
             row = image_descriptor.flatten()
             with open('./descriptors.csv', 'a', newline='') as csv_file:
                 writer = csv.writer(csv_file)
@@ -147,4 +150,9 @@ if __name__ == "__main__":
             with open('./filenames.csv', 'a', newline='') as csv_file:
                 writer = csv.writer(csv_file)
                 writer.writerow([file])
+            
+            row = image_descriptor_pruned.flatten()
+            with open('./pruned.csv', 'a', newline='') as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerow(row)
     

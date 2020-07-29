@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-simpleto = 40
+simpleto = 100
 
 def show_image_points(image):
     image = cv2.resize(image, (500, 500))
@@ -34,3 +34,7 @@ def show_image_points(image):
     plt.subplot(111),plt.imshow(image, cmap='gray')
     plt.scatter(x = points[:, 0], y = points[:, 1], c='r', s=40)
     plt.show()
+
+if __name__ == '__main__':
+    image = cv2.imread('.\doodles\Plane.png')
+    show_image_points(image)

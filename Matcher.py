@@ -11,7 +11,7 @@ import numpy as np
 import time
 from ShapeContext import ShapeContext
 
-pruning_points = 10
+pruning_points = 20
 sc = ShapeContext()
 
 class Matcher:
@@ -61,6 +61,17 @@ class Matcher:
             indices_to_check.append(self.filenames.index(filename))
         return indices_to_check
     
+    def collapse_similar_shapes(self, sorted_array, top = 10):
+        indices_to_check = []
+        class_ranking = []
+        check_filenames = sorted_array[:][:, 0]
+        for filename in check_filenames:
+            clean_name = filename[0:-1]
+            if clean_name not in class_ranking:
+                class_ranking.append(clean_name)
+                indices_to_check.append(self.filenames.index(filename))
+        return indices_to_check[:top]
+    
     def match(self, image, indices_to_check = []):
         image_points = sc.get_points_from_img(image)
         image_descriptor = sc.compute(image_points)
@@ -101,7 +112,8 @@ if __name__ == '__main__':
     image = cv2.imread(image_path, 0)
     
     prune_match = matcher.prune_match(image)
-    indices_to_check = matcher.find_indices_to_check(prune_match, 10)
+    #indices_to_check = matcher.find_indices_to_check(prune_match, 5)
+    indices_to_check = matcher.collapse_similar_shapes(prune_match, 6)
     match = matcher.match(image, indices_to_check)
     
     print(match[:, 0])

@@ -29,7 +29,7 @@ class ShapeContext(object):
         indexes = zip(row_ind.tolist(), col_ind.tolist())
         return total, indexes
     
-    def get_points_from_img(self, image, simpleto=40):
+    def get_points_from_img(self, image, simpleto=100):
         if len(image.shape) > 2:
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -130,16 +130,16 @@ class ShapeContext(object):
 
 if __name__ == "__main__":
     sc = ShapeContext()
-    path = '.\images'
+    path = '.\doodles'
     files = []
     for r, d, f in os.walk(path):
         for file in f:
-            image = cv2.imread('./images/'+file, 0)
+            image = cv2.imread('./doodles/'+file, 0)
             
             image_points = sc.get_points_from_img(image)
             image_descriptor = sc.compute(image_points)
             
-            image_points_pruned = sc.get_points_from_img(image, 10)
+            image_points_pruned = sc.get_points_from_img(image, 20)
             image_descriptor_pruned = sc.compute(image_points_pruned)
             
             row = image_descriptor.flatten()
